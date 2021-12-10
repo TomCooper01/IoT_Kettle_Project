@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>IOT Kettle - Home</title>
+    <script type="text/javascript">
+
+        var connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+    
+        connection.onopen = function () {
+            connection.send('Connect ' + new Date());
+        };
+        connection.onerror = function (error) {
+            console.log('WebSocket Error ', error);
+        };
+        connection.onmessage = function (e) {
+            document.getElementById("WiFiNetwork").innerHTML = e.data;
+        };
+        connection.onclose = function () {
+            console.log('WebSocket connection closed');
+        };
+
+        function switch()   {
+            connection.send("SWITCH");
+        }
+    </script>
+</head>
+<body>
+    <p>Kettle Page</p><br>
+    <button onclick="switch()">Switch</button>
+    <p id="KettleOutput"></p>
+</body>
+</html>
